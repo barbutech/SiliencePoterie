@@ -1,6 +1,6 @@
 import {alpha, createTheme} from "@mui/material";
 import {palette} from "./palette";
-import {Colors} from "../utils/Corlors.constant";
+import {Colors} from "../constants/Corlors.constant";
 
 export const theme = createTheme({
     palette,
@@ -45,7 +45,7 @@ export const theme = createTheme({
         styleOverrides: {
           root: (props) => ({
             color: "black"
-          })
+          }),
         }
       },
       MuiTypography: {

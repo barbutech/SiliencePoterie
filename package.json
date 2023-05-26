@@ -16,13 +16,17 @@
     "@types/react": "^18.2.5",
     "@types/react-dom": "^18.2.4",
     "dayjs": "^1.11.7",
+    "firebase": "^9.22.1",
+    "i18next": "^22.5.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-i18next": "^12.3.1",
     "react-router-dom": "^6.11.2",
     "react-scripts": "5.0.1",
     "theming": "^3.3.0",
     "typescript": "^4.9.5",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "yup": "^1.2.0"
   },
   "scripts": {
     "dev": "react-scripts dev",
