@@ -8,6 +8,8 @@ import {MeetingsEnum} from "../utils/meetings.enum";
 import {auth} from "../utils/firebase.util";
 import {meetingQuery, meetingService} from "../store/meetings";
 import {useObservable} from "@ngneat/react-rxjs";
+import {grey} from "@mui/material/colors";
+import {Colors} from "../constants/Corlors.constant";
 
 export interface Meetings {
   morning10: string[];
@@ -21,7 +23,7 @@ export const Course = () => {
   const userId = auth.currentUser?.uid;
 
   useEffect(() => {
-    meetingService.getMeeting(date?.format("DD-MM-YYYY")).subscribe();
+    meetingService.getRealTimeMeeting(date?.format("DD-MM-YYYY"));
   }, [date])
 
   return <Stack pb="30px">
@@ -38,13 +40,21 @@ export const Course = () => {
           cours ! En 2h vous apprendrez les rudiments de la céramique et son maniement`} </Typography>
       </Stack>
     </Stack>
-    <DateCalendar disablePast value={date} onChange={async (value) => {
-      setDate(value)
-      // setMeets(await Firebase.GetNumberOfDocs(dayjs(value?.toDate()).format("DD-MM-YYYY")))
-    }}/>
-    {date && <Stack spacing={2} alignItems="center">
-        <Box border={2} p={12}>
-            <Typography>10-12</Typography>
+    <Stack direction="row">
+      <Stack alignItems="center" justifyContent="center" flex={1} bgcolor={grey["500"]}>
+        <Typography>
+          {`Cours de 2h de poterie du lundi au vendredi. 40 euros par séances`}
+        </Typography>
+      </Stack>
+      <Stack px="40px" bgcolor={alpha(Colors.primary, 0.7)}>
+        <DateCalendar disablePast value={date} onChange={async (value) => {
+          setDate(value)
+        }}/>
+      </Stack>
+    </Stack>
+    {date && <Stack direction="row" py="40px" spacing={2} justifyContent="space-evenly">
+        <Box border={2} px={10} py={3}>
+            <Typography>Cours de poterie de 10h à 12h</Typography>
             <Typography>{`${3 - (meets?.meeting?.morning10?.length ?? 0)} place(s) disponible(s)`}</Typography>
           {(!meets?.meeting?.morning10 || meets?.meeting?.morning10?.length < 3) && <Button onClick={() => {
             if (!userId) {
@@ -53,20 +63,20 @@ export const Course = () => {
             Firebase.CreateDoc(dayjs(date?.toDate()).format("DD-MM-YYYY"), MeetingsEnum.MORNING10, userId, meets?.meeting)
           }}>Prendre rdv</Button>}
         </Box>
-        <Box border={2} p={12}>
-            <Typography>14-16</Typography>
+        <Box border={2} px={10} py={3}>
+            <Typography>Cours de poterie de 14h à 16h</Typography>
             <Typography>{`${3 - (meets?.meeting?.after14?.length ?? 0)} place(s) disponible(s)`}</Typography>
-          {(!meets?.meeting?.after14 || meets?.meeting?.after14?.length <= 3) && <Button onClick={() => {
+          {(!meets?.meeting?.after14 || meets?.meeting?.after14?.length < 3) && <Button onClick={() => {
             if (!userId) {
               return;
             }
             Firebase.CreateDoc(dayjs(date?.toDate()).format("DD-MM-YYYY"), MeetingsEnum.AFTER14, userId, meets?.meeting)
           }}>Prendre rdv</Button>}
         </Box>
-        <Box border={2} p={12}>
-            <Typography>16-18</Typography>
+        <Box border={2} px={10} py={3}>
+            <Typography>Cours de poterie de 16h à 18h</Typography>
             <Typography>{`${3 - (meets?.meeting?.after16?.length ?? 0)} place(s) disponible(s)`}</Typography>
-          {(!meets?.meeting?.after16 || meets?.meeting?.after16?.length <= 3) && <Button onClick={() => {
+          {(!meets?.meeting?.after16 || meets?.meeting?.after16?.length < 3) && <Button onClick={() => {
             if (!userId) {
               return;
             }

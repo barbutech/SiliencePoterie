@@ -12,6 +12,7 @@ export namespace Firebase {
     if (!newMeeting) {
       newMeeting = {morning10: [], after14: [], after16: []}
     }
+    console.log("newmeeting ", newMeeting)
     if (hour === MeetingsEnum.MORNING10)
       newMeeting[`morning10`].push(userId);
     else if (hour === MeetingsEnum.AFTER14)

@@ -1,7 +1,7 @@
 import {from, map, Observable, tap} from "rxjs";
 import {meetingStore} from "./meeting.store";
 import {Meeting} from "./meeting.model";
-import {doc, getDoc} from "firebase/firestore";
+import {doc, getDoc, onSnapshot} from "firebase/firestore";
 import {db} from "../../utils/firebase.util";
 import {getMeetingDataSource} from "./meeting.requests";
 
@@ -25,7 +25,20 @@ export class MeetingService {
       }),
       getMeetingDataSource.trackRequestStatus()
     );
+  };
 
+  getRealTimeMeeting = (id?: string) => {
+    const docRef = doc(db, "meetings", `${id}`);
+    onSnapshot(docRef, (newDoc) => {
+      const data = newDoc.data();
+      this.store.update((state) => ({
+          ...state,
+          currentMeeting: data?.meets
+        }),
+        getMeetingDataSource.setSuccess()
+      )
+      getMeetingDataSource.trackRequestStatus()
+    });
   };
 }
 

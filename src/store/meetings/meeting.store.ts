@@ -4,6 +4,6 @@ import {Meeting} from "./meeting.model";
 
 export const meetingStore = createStore(
   {name: "meetings"},
-  withProps<Meeting>({}),
+  withProps<Meeting>({currentMeeting: {morning10: [], after14: [], after16: []}}),
   withRequestsStatus(),
 );
