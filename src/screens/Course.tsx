@@ -8,7 +8,6 @@ import {MeetingsEnum} from "../utils/meetings.enum";
 import {auth} from "../utils/firebase.util";
 import {meetingQuery, meetingService} from "../store/meetings";
 import {useObservable} from "@ngneat/react-rxjs";
-import {grey} from "@mui/material/colors";
 import {Colors} from "../constants/Corlors.constant";
 
 export interface Meetings {
@@ -41,7 +40,7 @@ export const Course = () => {
       </Stack>
     </Stack>
     <Stack direction="row">
-      <Stack alignItems="center" justifyContent="center" flex={1} bgcolor={grey["500"]}>
+      <Stack alignItems="center" justifyContent="center" flex={1} bgcolor={Colors.secondary}>
         <Typography>
           {`Cours de 2h de poterie du lundi au vendredi. 40 euros par séances`}
         </Typography>

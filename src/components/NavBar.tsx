@@ -13,13 +13,16 @@ export const NavBar = () => {
         <Avatar style={{height: 90, width: 90}} src={logo}/>
         <Stack direction="row" justifyContent="flex-end" pr="90px" spacing={8}>
           <Button>
-            <Typography color="black"> Home</Typography>
+            <Typography color="black" onClick={() => navigate("home")}> Accueil</Typography>
           </Button>
           <Button>
-            <Typography color="black"> About me</Typography>
+            <Typography color="black" onClick={() => navigate("about")}> À propos</Typography>
           </Button>
           <Button onClick={() => navigate("cours")}>
             <Typography color="black"> Cours </Typography>
+          </Button>
+          <Button onClick={() => navigate("galerie")}>
+            <Typography color="black"> Galerie </Typography>
           </Button>
           <Button>
             <Typography color="black"> Me contacter</Typography>

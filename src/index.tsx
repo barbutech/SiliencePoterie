@@ -15,13 +15,12 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <CssBaseline>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <BrowserRouter>
-            <App/>
-          </BrowserRouter>
-        </LocalizationProvider>
-      </CssBaseline>
+      <CssBaseline/>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <BrowserRouter>
+          <App/>
+        </BrowserRouter>
+      </LocalizationProvider>
     </ThemeProvider>
   </React.StrictMode>
 );

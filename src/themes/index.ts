@@ -41,10 +41,12 @@ export const theme = createTheme({
           border-radius: 4px;
         }`
       },
-      MuiButton: {
+      MuiButtonBase: {
         styleOverrides: {
-          root: (props) => ({
-            color: "black"
+          root: () => ({
+            "&.MuiButton-root": {
+              backgroundColor: "black"
+            }
           }),
         }
       },
