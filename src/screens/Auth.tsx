@@ -1,8 +1,8 @@
 import {Button, Stack, TextField, Typography} from "@mui/material";
 import {Colors} from "../constants/Corlors.constant";
 import {useState} from "react";
-import {UserInfos} from "../store/common/User";
 import {Firebase} from "../store/common/Firebase";
+import {UserInfos} from "../store/session";
 
 export const Auth = () => {
   const [userInfos, setUserInfos] = useState<UserInfos>({});
@@ -36,9 +36,11 @@ export const Auth = () => {
                  placeholder="Mot de passe"/>
       <Button onClick={() => {
         if (!isValidEmail(userInfos.email) || userInfos.email === undefined) {
+          console.log("erreur mail")
           return
         }
         if (!checkPassword(userInfos.password ?? "") || userInfos.password === undefined) {
+          console.log("erreur password")
           return
         }
         Firebase.AuthWithEmail(userInfos.email, userInfos.password)

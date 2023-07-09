@@ -1,4 +1,4 @@
-import {alpha, Box, Button, Stack, Typography} from "@mui/material";
+import {alpha, Box, Button, IconButton, Modal, Stack, TextField, Typography} from "@mui/material";
 import React, {useEffect, useState} from "react";
 import {DateCalendar} from '@mui/x-date-pickers';
 import log from "../assets/hands.jpg";
@@ -9,19 +9,26 @@ import {auth} from "../utils/firebase.util";
 import {meetingQuery, meetingService} from "../store/meetings";
 import {useObservable} from "@ngneat/react-rxjs";
 import {Colors} from "../constants/Corlors.constant";
-
-export interface Meetings {
-  morning10: string[];
-  after14: string[];
-  after16: string[];
-}
+import {ReactComponent as Close} from "../assets/icon_close.svg";
+import {sessionQuery, sessionService, UserInfos} from "../store/session/";
 
 export const Course = () => {
   const [date, setDate] = useState<Dayjs | null>(dayjs());
   const [meets] = useObservable(meetingQuery.meeting$);
+  const [user] = useObservable(sessionQuery.user$);
   const userId = auth.currentUser?.uid;
+  const [isOpen, setIsopen] = useState(false);
+  const [userInfos, setUserInfos] = useState<UserInfos>({});
+
+  const handleClose = () => setIsopen(false);
+
+  function isValidEmail(email?: string) {
+    if (!email) return false;
+    return /\S+@\S+\.\S+/.test(email);
+  }
 
   useEffect(() => {
+    sessionService.getSession();
     meetingService.getRealTimeMeeting(date?.format("DD-MM-YYYY"));
   }, [date])
 
@@ -76,12 +83,52 @@ export const Course = () => {
             <Typography>Cours de poterie de 16h à 18h</Typography>
             <Typography>{`${3 - (meets?.meeting?.after16?.length ?? 0)} place(s) disponible(s)`}</Typography>
           {(!meets?.meeting?.after16 || meets?.meeting?.after16?.length < 3) && <Button onClick={() => {
-            if (!userId) {
+            console.log(user.user)
+            if (!!user) {
+              alert("erreur, ce compte n'existe pas")
               return;
             }
-            Firebase.CreateDoc(dayjs(date?.toDate()).format("DD-MM-YYYY"), MeetingsEnum.AFTER16, userId, meets?.meeting)
           }}>Prendre rdv</Button>}
         </Box>
     </Stack>}
+    <Modal open={isOpen} onClose={handleClose}
+           style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+      <Stack width="50%" spacing={2} p="30px" bgcolor="white" justifyContent="center">
+        <IconButton aria-label="close" style={{maxWidth: "30px"}} onClick={handleClose}>
+          <Close/>
+        </IconButton>
+        <Stack spacing={2} pb="20px">
+          <Typography> Prénom</Typography>
+          <TextField placeholder={"Jean"} style={{maxWidth: "35%"}}
+                     error={userInfos.firstName === undefined || userInfos.firstName?.length === 0}
+                     helperText="Veuillez remplir votre prénom"
+                     onChange={(event) => setUserInfos({...userInfos, firstName: event.target.value})}></TextField>
+          <Typography> Nom</Typography>
+          <TextField placeholder={"Langlerais"} style={{maxWidth: "35%"}}
+                     error={userInfos.lastName === undefined || userInfos.lastName?.length === 0}
+                     helperText="Veuillez remplir votre nom"
+                     onChange={(event) => setUserInfos({...userInfos, lastName: event.target.value})}></TextField>
+          {/*<Typography> Numéro de téléphone</Typography>*/}
+          {/*<TextField placeholder={"06 06 06 06 06"} style={{maxWidth: "35%"}}*/}
+          {/*           onChange={(event) => setUserInfos({...userInfos, lastName: event.target.value})}></TextField>*/}
+          <Typography> E-mail</Typography>
+          <TextField placeholder={"example@siliencepoterie.com"} error={!isValidEmail(userInfos.email)}
+                     helperText={"Format email incorrect"}
+                     style={{maxWidth: "35%"}}
+                     onChange={(event) => setUserInfos({...userInfos, lastName: event.target.value})}></TextField>
+        </Stack>
+        <Button
+          style={{
+            maxWidth: "35px",
+            alignSelf: "flex-end",
+            backgroundColor: "black"
+          }}>Valider</Button>
+      </Stack>
+    </Modal>
   </Stack>
 }
+//
+// if (!userId) {
+//   return;
+// }
+// Firebase.CreateDoc(dayjs(date?.toDate()).format("DD-MM-YYYY"), MeetingsEnum.AFTER16, userId, meets?.meeting)
